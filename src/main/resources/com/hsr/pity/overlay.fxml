@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hsr.pity.OverlayController"
+      style="-fx-background-color: transparent;"
+      spacing="10">
+
+    <!-- Фон с закругленными углами -->
+    <Rectangle arcWidth="20" arcHeight="20"
+               width="300" height="200"
+               fill="rgba(30,30,30,0.7)"
+               stroke="rgba(255,255,255,0.3)"/>
+
+    <Label fx:id="pityCounterLabel"
+           text="Pity Counter: 0"
+           style="-fx-text-fill: white; -fx-font-size: 16pt;"
+    />
+</VBox>
