@@ -1,6 +1,7 @@
 package com.hsr.pity;
 
 import com.hsr.pity.capture.ScreenCapturer;
+import com.hsr.pity.database.BannerHistoryDao;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -12,12 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class App extends Application {  // Исправлено: AppLication → Application
     private static final Logger logger = LoggerFactory.getLogger(App.class);
     private OverlayController overlayController;
+    private int currentPity = 0;
+    private final BannerHistoryDao historyDao = new BannerHistoryDao();
 
     @Override
     public void start(Stage primaryStage) {
@@ -56,8 +60,24 @@ public class App extends Application {  // Исправлено: AppLication →
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             try {
                 BufferedImage image = capturer.capture();
-                int pityCount = ImageProcessor.processPityCounter(image);
-                Platform.runLater(() -> overlayController.updatePityCounter(pityCount));
+                boolean isPityReset = ImageProcessor.processPityCounter(image);
+                
+                if (isPityReset) {
+                    // Сохраняем в базу данных перед сбросом
+                    historyDao.insertRecord(
+                        LocalDateTime.now(),
+                        "gacha_roll",
+                        currentPity,
+                        ImageProcessor.isFiveStar()
+                    );
+                    
+                    currentPity = 0;
+                    logger.info("Pity reset detected! Counter reset to 0");
+                } else {
+                    currentPity++;
+                }
+                
+                Platform.runLater(() -> overlayController.updatePityCounter(currentPity));
             } catch (Exception e) {
                 logger.error("Capture error", e);
             }

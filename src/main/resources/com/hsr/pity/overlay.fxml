@@ -33,6 +33,13 @@
                   promptText="Введите количество круток"
                   style="-fx-background-color: rgba(50, 50, 50, 0.7); -fx-text-fill: white; -fx-prompt-text-fill: #AAAAAA;"
                   prefWidth="150"/>
+        <ComboBox fx:id="itemTypeComboBox"
+                  promptText="Тип предмета"
+                  style="-fx-background-color: rgba(50, 50, 50, 0.7); -fx-text-fill: white;"
+                  prefWidth="120"/>
+        <CheckBox fx:id="is5StarCheckBox"
+                  text="5★"
+                  style="-fx-text-fill: white;"/>
         <Button fx:id="savePityButton"
                 text="Сохранить"
                 onAction="#handleSavePity"

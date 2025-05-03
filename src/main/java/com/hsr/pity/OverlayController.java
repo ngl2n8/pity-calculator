@@ -1,6 +1,7 @@
 package com.hsr.pity;
 
 import com.hsr.pity.logic.PityCalculator;
+import com.hsr.pity.database.BannerHistoryDao;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,6 +12,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Alert;
+
+import java.time.LocalDateTime;
 
 public class OverlayController {
     private static final Logger logger = LoggerFactory.getLogger(OverlayController.class);
@@ -20,10 +26,13 @@ public class OverlayController {
     @FXML private Label probabilityLabel;
     @FXML private ProgressBar pityProgressBar;
     @FXML private TextField manualPityInput;
+    @FXML private ComboBox<String> itemTypeComboBox;
+    @FXML private CheckBox is5StarCheckBox;
     @FXML private Button savePityButton;
 
     private int currentPity = 0;
     private final PityCalculator calculator = new PityCalculator();
+    private final BannerHistoryDao historyDao = new BannerHistoryDao();
 
     @FXML
     public void initialize() {
@@ -45,6 +54,16 @@ public class OverlayController {
             }
         });
 
+        // Инициализация ComboBox
+        itemTypeComboBox.getItems().addAll(
+            "Персонаж",
+            "Световой конус"
+        );
+        
+        // Установка значений по умолчанию
+        is5StarCheckBox.setSelected(false);
+        itemTypeComboBox.setValue("Персонаж");
+
         // Анимация плавного обновления
         new AnimationTimer() {
             @Override
@@ -57,17 +76,37 @@ public class OverlayController {
     @FXML
     private void handleSavePity() {
         try {
-            String input = manualPityInput.getText();
-            if (!input.isEmpty()) {
-                int newPity = Integer.parseInt(input);
-                if (newPity >= 0 && newPity <= 90) {
-                    currentPity = newPity;
-                    manualPityInput.clear();
-                    logger.info("Manually set pity counter to: {}", newPity);
-                }
+            int pityCount = Integer.parseInt(manualPityInput.getText().trim());
+            if (pityCount < 0 || pityCount > 90) {
+                showError("Количество круток должно быть от 0 до 90");
+                return;
             }
+
+            String itemType = itemTypeComboBox.getValue();
+            if (itemType == null || itemType.isEmpty()) {
+                showError("Выберите тип предмета");
+                return;
+            }
+
+            // Сохраняем в базу данных
+            historyDao.insertRecord(
+                LocalDateTime.now(),
+                itemType,
+                pityCount,
+                is5StarCheckBox.isSelected()
+            );
+
+            // Обновляем интерфейс
+            updateUI(pityCount);
+            
+            // Очищаем поле ввода
+            manualPityInput.clear();
+            
+            // Показываем сообщение об успехе
+            showInfo("Запись успешно сохранена");
+            
         } catch (NumberFormatException e) {
-            logger.error("Invalid pity input: {}", manualPityInput.getText());
+            showError("Введите корректное число круток");
         }
     }
 
@@ -76,12 +115,12 @@ public class OverlayController {
     }
 
     private void updateUI() {
-        double probability = calculator.calculateCurrentRate(currentPity);
-        int remaining = calculator.calculateRemainingPity(currentPity);
-
-        pityCounterLabel.setText(String.format("Pity: %d/90", currentPity));
-        probabilityLabel.setText(String.format("Chance: %.1f%%", probability * 100));
+        double probability = PityCalculator.calculateCurrentRate(currentPity);
+        int remaining = PityCalculator.calculateRemainingPity(currentPity);
+        
         pityProgressBar.setProgress(currentPity / 90.0);
+        pityCounterLabel.setText(String.format("Крутки: %d", currentPity));
+        probabilityLabel.setText(String.format("Шанс: %.1f%%", probability * 100));
 
         // Динамическое изменение цвета
         if (currentPity >= 74) {
@@ -89,5 +128,30 @@ public class OverlayController {
         } else {
             pityProgressBar.setStyle("-fx-accent: #FFB84D;");
         }
+    }
+
+    private void updateUI(int pityCount) {
+        double probability = PityCalculator.calculateCurrentRate(pityCount);
+        int remaining = PityCalculator.calculateRemainingPity(pityCount);
+        
+        pityProgressBar.setProgress(pityCount / 90.0);
+        pityCounterLabel.setText(String.format("Крутки: %d", pityCount));
+        probabilityLabel.setText(String.format("Шанс: %.1f%%", probability * 100));
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showInfo(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Информация");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

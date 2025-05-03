@@ -32,3 +32,45 @@
 .button:hover {
     -fx-background-color: #FFC84D;
 }
+
+.combo-box {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: rgba(255, 200, 100, 0.3);
+    -fx-border-width: 1;
+}
+
+.combo-box:focused {
+    -fx-border-color: #FFB84D;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(50, 50, 50, 0.7);
+}
+
+.combo-box .list-view {
+    -fx-background-color: rgba(50, 50, 50, 0.9);
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: rgba(255, 184, 77, 0.3);
+}
+
+.check-box {
+    -fx-text-fill: white;
+}
+
+.check-box .box {
+    -fx-background-color: rgba(50, 50, 50, 0.7);
+    -fx-border-color: rgba(255, 200, 100, 0.3);
+    -fx-border-radius: 3;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #FFB84D;
+}
+
+.check-box:selected .box {
+    -fx-border-color: #FFB84D;
+}
