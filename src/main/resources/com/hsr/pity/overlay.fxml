@@ -27,6 +27,18 @@
         <Label fx:id="probabilityLabel"
                style="-fx-font-size: 14; -fx-text-fill: white;"/>
     </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="manualPityInput" 
+                  promptText="Введите количество круток"
+                  style="-fx-background-color: rgba(50, 50, 50, 0.7); -fx-text-fill: white; -fx-prompt-text-fill: #AAAAAA;"
+                  prefWidth="150"/>
+        <Button fx:id="savePityButton"
+                text="Сохранить"
+                onAction="#handleSavePity"
+                style="-fx-background-color: #FFB84D; -fx-text-fill: black;"/>
+    </HBox>
+
     <stylesheets>
         <URL value="@/com/hsr/pity/styles.css"/>
     </stylesheets>

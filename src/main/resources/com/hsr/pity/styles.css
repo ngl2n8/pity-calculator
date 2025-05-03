@@ -11,3 +11,24 @@
     -fx-background-radius: 10;
     -fx-padding: 2px;
 }
+
+.text-field {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: rgba(255, 200, 100, 0.3);
+    -fx-border-width: 1;
+}
+
+.text-field:focused {
+    -fx-border-color: #FFB84D;
+}
+
+.button {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #FFC84D;
+}

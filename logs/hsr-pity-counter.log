@@ -1,0 +1,12 @@
+2025-05-03 11:59:04.609 [JavaFX Application Thread] INFO  com.hsr.pity.App - Starting application initialization
+2025-05-03 11:59:05.320 [JavaFX Application Thread] INFO  com.hsr.pity.OverlayController - Overlay controller initialized
+2025-05-03 11:59:05.846 [JavaFX Application Thread] INFO  com.hsr.pity.App - Application window shown successfully
+2025-05-03 12:01:50.384 [JavaFX Application Thread] INFO  com.hsr.pity.App - Starting application initialization
+2025-05-03 12:01:50.860 [JavaFX Application Thread] INFO  com.hsr.pity.OverlayController - Overlay controller initialized
+2025-05-03 12:01:51.422 [JavaFX Application Thread] INFO  com.hsr.pity.App - Application window shown successfully
+2025-05-03 15:19:56.265 [JavaFX Application Thread] INFO  com.hsr.pity.App - Starting application initialization
+2025-05-03 15:19:56.523 [JavaFX Application Thread] INFO  com.hsr.pity.OverlayController - Initializing UI components
+2025-05-03 15:19:56.853 [JavaFX Application Thread] INFO  com.hsr.pity.App - Application window shown successfully
+2025-05-03 15:26:43.993 [JavaFX Application Thread] INFO  com.hsr.pity.App - Starting application initialization
+2025-05-03 15:26:44.705 [JavaFX Application Thread] INFO  com.hsr.pity.OverlayController - Initializing UI components
+2025-05-03 15:26:45.593 [JavaFX Application Thread] INFO  com.hsr.pity.App - Application window shown successfully

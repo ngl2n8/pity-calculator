@@ -5,6 +5,8 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
@@ -17,6 +19,8 @@ public class OverlayController {
     @FXML private Label pityCounterLabel;
     @FXML private Label probabilityLabel;
     @FXML private ProgressBar pityProgressBar;
+    @FXML private TextField manualPityInput;
+    @FXML private Button savePityButton;
 
     private int currentPity = 0;
     private final PityCalculator calculator = new PityCalculator();
@@ -34,6 +38,13 @@ public class OverlayController {
 
         pityProgressBar.setStyle("-fx-accent: #FFB84D;");
 
+        // Добавляем валидацию ввода
+        manualPityInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                manualPityInput.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+
         // Анимация плавного обновления
         new AnimationTimer() {
             @Override
@@ -41,6 +52,23 @@ public class OverlayController {
                 updateUI();
             }
         }.start();
+    }
+
+    @FXML
+    private void handleSavePity() {
+        try {
+            String input = manualPityInput.getText();
+            if (!input.isEmpty()) {
+                int newPity = Integer.parseInt(input);
+                if (newPity >= 0 && newPity <= 90) {
+                    currentPity = newPity;
+                    manualPityInput.clear();
+                    logger.info("Manually set pity counter to: {}", newPity);
+                }
+            }
+        } catch (NumberFormatException e) {
+            logger.error("Invalid pity input: {}", manualPityInput.getText());
+        }
     }
 
     public void updatePityCounter(int newPity) {
